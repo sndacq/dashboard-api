@@ -1,21 +1,25 @@
-const { DataSource } = require("typeorm");
+import { DataSource, DataSourceOptions } from 'typeorm';
+import { config } from 'dotenv';
+import Account from './src/entities/account.entity';
+import Category from './src/entities/category.entity';
+import Entry from './src/entities/entry.entity';
+import { dashboard1676151451390 } from './migrations/1676151451390-dashboard';
 
-require('dotenv').config();
-for (const envName of Object.keys(process.env)) {
-  process.env[envName] = process.env[envName].replace(/\\n/g, '\n');
-}
+config();
 
-const connectionSource = new DataSource({
-  type: "postgres",
-  host: "127.0.0.1",
-  port: 5432,
-  username: "postgres",
-  password: "admin",
-  database: "dashboard",
-  entities: ['./src/models/**/*.entity{.js,.ts}'],
-  migrations: ['./src/migrations/*.js'],
-});
+const { POSTGRES_HOST, POSTGRES_PORT, POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DATABASE } =
+  process.env;
 
-module.exports = {
-  connectionSource,
-}
+ 
+export default new DataSource({
+  type: 'postgres',
+  host: POSTGRES_HOST,
+  port: +POSTGRES_PORT,
+  username: POSTGRES_USER,
+  password: POSTGRES_PASSWORD,
+  database: POSTGRES_DATABASE,
+  entities: [Account, Category, Entry],
+  migrations: [dashboard1676151451390],
+} as DataSourceOptions);
+
+ 

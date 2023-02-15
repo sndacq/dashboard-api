@@ -1,7 +1,6 @@
-import { Entity, Column, CreateDateColumn, ManyToOne } from 'typeorm';
-import { Account } from './account.entity';
-import { BaseEntity } from './base.entity';
-import { Category } from './category.entity';
+import { Entity, Column, CreateDateColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import Account from './account.entity';
+import Category from './category.entity';
 
 enum ActionEnum {
   INCOME = "0",
@@ -11,9 +10,11 @@ enum ActionEnum {
 }
 
 @Entity({ name: 'entry' })
-export class Entry extends BaseEntity {
+class Entry {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
-  @Column({ type: 'enum' })
+  @Column('enum', { nullable: false, enum: ActionEnum })
   action: ActionEnum;
 
   @CreateDateColumn({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
@@ -34,3 +35,5 @@ export class Entry extends BaseEntity {
   @ManyToOne(type => Category, category => category.entry)
   category: Category;
 }
+
+export default Entry;

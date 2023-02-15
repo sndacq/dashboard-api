@@ -1,9 +1,10 @@
-import { Entity, Column, OneToMany } from 'typeorm';
-import { BaseEntity } from './base.entity';
-import { Entry } from './entry.entity';
+import { Entity, Column, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import Entry from './entry.entity';
 
 @Entity({ name: 'account' })
-export class Account extends BaseEntity {
+export class Account {
+  @PrimaryGeneratedColumn('uuid')
+  id: string;
 
   @Column({ type: 'varchar', length: 300 })
   name: string;
@@ -14,10 +15,10 @@ export class Account extends BaseEntity {
   @Column({ type: 'varchar', length: 300 })
   uid: string;
 
-  @Column({ type: 'boolean', length: 300 })
+  @Column({ type: 'boolean' })
   is_trans_expense: boolean;
 
-  @Column({ type: 'bigint', length: 300 })
+  @Column({ type: 'bigint' })
   value: BigInt;
 
   @OneToMany(type => Entry, entry => entry.account)
@@ -26,3 +27,5 @@ export class Account extends BaseEntity {
   @OneToMany(type => Entry, entry => entry.toAssetId)
   entryTransfer: Entry[]; 
 }
+
+export default Account;
